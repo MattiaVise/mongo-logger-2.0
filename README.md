@@ -6,7 +6,7 @@ MongoLogger is a Node.js module designed to facilitate logging into a MongoDB da
 
 How to start:
 
-    const  MongoLogger  =  require("MongoDB-Logger")
+    const  MongoLogger  =  require("mongo-logger-2.0")
     
     const  logger  =  new  MongoLogger("mongodb://localhost:27017/loggerDb")
     await logger.initialize() 

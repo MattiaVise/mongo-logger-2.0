@@ -1,7 +1,7 @@
 const { default: mongoose } = require("mongoose");
 const Schema = require("./model/log")
 const fs = require('fs');
-const {green, red } = require('kleur')
+const { green, red } = require('kleur')
 
 const print = (type, timestamp, message) => {
     console.log(red(type) + " | " + green(timestamp) + " | " + message)
@@ -91,7 +91,7 @@ class MongoLogger {
         }
         try {
 
-            const result = await this.logSchema.create({type: "error", message });
+            const result = await this.logSchema.create({ type: "error", message });
             if (option.print) {
                 print("error", Date.now(), message)
             }
@@ -99,7 +99,7 @@ class MongoLogger {
             console.error('Error adding log entry:', err);
         }
     }
-    
+
     /**
      * Creates a new error entry in the database.
      * 
@@ -119,7 +119,7 @@ class MongoLogger {
         }
         try {
 
-            const result = await this.logSchema.create({type: "info", message });
+            const result = await this.logSchema.create({ type: "info", message });
             if (option.print) {
                 print("info", Date.now(), message)
             }
@@ -148,7 +148,7 @@ class MongoLogger {
         }
         try {
 
-            const result = await this.logSchema.create({type: "warn", message });
+            const result = await this.logSchema.create({ type: "warn", message });
             if (option.print) {
                 print("warn", Date.now(), message)
             }
@@ -176,7 +176,7 @@ class MongoLogger {
         }
         try {
 
-            const result = await this.logSchema.create({type: "fatal", message });
+            const result = await this.logSchema.create({ type: "fatal", message });
             if (option.print) {
                 print("fatal", Date.now(), message)
             }
@@ -204,7 +204,7 @@ class MongoLogger {
         }
         try {
 
-            const result = await this.logSchema.create({type: "debug", message });
+            const result = await this.logSchema.create({ type: "debug", message });
             if (option.print) {
                 print("debug", Date.now(), message)
             }

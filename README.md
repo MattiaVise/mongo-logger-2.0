@@ -1,29 +1,28 @@
+# MongoLogger 2.0
 
-# MongoLogger
-
-MongoLogger is a logging utility that interacts with a MongoDB database to store, retrieve, and manipulate log entries. It provides various methods for logging different types of messages and supports templating for structured log messages.
+MongoLogger 2.0 is an advanced logging utility that interacts with a MongoDB database to store, retrieve, and manipulate log entries. It provides various methods for logging different types of messages and supports templating for structured log messages.
 
 ## Installation
 
-Install the MongoLogger package via npm:
+Install the MongoLogger 2.0 package via npm:
 
 ```bash
-npm install mongo-logger
+npm install mongo-logger-2.0
 ```
 
 ## Usage
 
 ### Initialize MongoLogger
 
-First, initialize MongoLogger with your MongoDB connection URI:
+First, initialize MongoLogger with your MongoDB connection URI. Since initialization may take some time to connect to the database, make sure to use `await` or handle promises accordingly:
 
 ```javascript
-const MongoLogger = require('mongo-logger');
+const MongoLogger = require('mongo-logger-2.0');
 
 const logger = new MongoLogger('mongodb://localhost:27017/mydb');
 
 // Initialize the logger
-logger.initialize()
+await logger.initialize()
   .then(() => {
     console.log('MongoLogger initialized successfully');
   })
@@ -34,7 +33,7 @@ logger.initialize()
 
 ### Logging Methods
 
-MongoLogger provides methods to log messages of different types (`error`, `info`, `warn`, `debug`, `fatal`):
+MongoLogger 2.0 provides methods to log messages of different types (`error`, `info`, `warn`, `debug`, `fatal`):
 
 ```javascript
 // Logging examples
@@ -49,7 +48,7 @@ Each logging method accepts a message string and an optional `option` object wit
 
 ### Templating
 
-MongoLogger supports templating for structured log messages. Use `createTemplate` to define templates and `useTemplate` to apply them:
+MongoLogger 2.0 supports templating for structured log messages. Use `createTemplate` to define templates and `useTemplate` to apply them:
 
 ```javascript
 // Create a template
@@ -131,4 +130,3 @@ Contributions are welcome! Please fork the repository and submit a pull request.
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
-

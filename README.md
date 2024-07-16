@@ -1,4 +1,5 @@
-# MongoLogger-2.0
+
+# MongoLogger 2.0
 
 MongoLogger 2.0 is an advanced logging utility that interacts with a MongoDB database to store, retrieve, and manipulate log entries. It provides various methods for logging different types of messages and supports templating for structured log messages.
 
@@ -18,9 +19,9 @@ First, initialize MongoLogger with your MongoDB connection URI. Since initializa
 
 ```javascript
 const MongoLogger = require('mongo-logger-2.0');
+const logger = new MongoLogger('mongodb://localhost:27017/mydb');
 
 async function initializeLogger() {
-  const logger = new MongoLogger('mongodb://localhost:27017/mydb');
   
   try {
     await logger.initialize();
@@ -61,6 +62,8 @@ logger.createTemplate('error', 'errorTemplate', 'Error occurred: {% message %}')
 logger.useTemplate('errorTemplate', { message: 'Connection timeout' }, { print: true });
 ```
 
+> **Note:** Templates are not persisted in the database. You need to recreate them upon API restart.
+
 ### Retrieving Logs
 
 You can retrieve logs based on various criteria such as date range, log type, and more:
@@ -95,12 +98,15 @@ Print logs directly to the console using `printLogForDay` or `printLogBetweenDat
 
 ```javascript
 // Print logs for a specific date
+const date = new Date('2023-07-15');
 logger.printLogForDay(date, { type: 'error' })
   .catch(err => {
     console.error('Error printing logs:', err);
   });
 
 // Print logs between two dates
+const startDate = new Date('2023-07-01');
+const endDate = new Date('2023-07-15');
 logger.printLogBetweenDate(startDate, endDate, { type: 'warn' })
   .catch(err => {
     console.error('Error printing logs:', err);
@@ -113,12 +119,15 @@ Create JSON log files using `createLogFileForDay` or `createLogFileBetweenDate` 
 
 ```javascript
 // Create a log file for logs on a specific date
+const date = new Date('2023-07-15');
 logger.createLogFileForDay(date, './logs/log-2023-07-15.json', { type: 'error' })
   .catch(err => {
     console.error('Error creating log file:', err);
   });
 
 // Create a log file for logs between two dates
+const startDate = new Date('2023-07-01');
+const endDate = new Date('2023-07-15');
 logger.createLogFileBetweenDate(startDate, endDate, './logs/log-2023-07-01-to-2023-07-15.json', { type: 'warn' })
   .catch(err => {
     console.error('Error creating log file:', err);

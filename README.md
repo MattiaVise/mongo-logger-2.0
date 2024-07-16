@@ -33,6 +33,10 @@ async function initializeLogger() {
 initializeLogger();
 ```
 
+> [!WARNING]
+>
+> **Note:** By default, logs are not printed to the console (`print` option is `false`). If you wish to print logs to the console, explicitly set the `print` option to `true` when using logging methods.
+
 ### Logging Methods
 
 MongoLogger 2.0 provides methods to log messages of different types (`error`, `info`, `warn`, `debug`, `fatal`):

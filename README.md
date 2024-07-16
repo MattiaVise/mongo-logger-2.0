@@ -35,7 +35,7 @@ Note: Make sure to use `await` before `initialize` because it requires time to e
 ### logger.fatal()
  Add a new fatal log. You can choose to print to the console.
 
-    logger.debug( "Log Message", {print: true})	
+    logger.fatal( "Log Message", {print: true})	
 ### logger.new()
  Add a new log. You can choose type and if you want to print to the console.
 

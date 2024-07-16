@@ -12,6 +12,7 @@ class MongoLogger {
     constructor(dbUri) {
         this.dbUri = dbUri
         this.logSchema = null
+        this.templates = []
     }
 
     /**
@@ -640,6 +641,29 @@ class MongoLogger {
         } catch (err) {
             return "Error: " + err;
         }
+    }
+
+
+     createTemplate(type, name, string) {
+        this.templates.push({ type, name, string });
+    }
+
+     useTemplate(name, input, option) {
+        const template = this.templates.find(t => t.name === name);
+        if (!template) {
+            throw new Error(`Template '${name}' non trovato.`);
+        }
+
+        let result = template.string;
+        Object.keys(input).forEach(key => {
+            const regex = new RegExp(`{%\\s*${key}\\s*%}`, 'g');
+            result = result.replace(regex, input[key]);
+        });
+
+        if(option.print){
+            print(template.type, Date.now(), result)
+        }
+        this.logSchema.create({type: template.type, result});
     }
 
 }

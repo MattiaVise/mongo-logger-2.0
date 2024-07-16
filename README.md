@@ -39,7 +39,6 @@ MongoLogger 2.0 provides methods to log messages of different types (`error`, `i
 
 ```javascript
 // Logging examples
-logger.new("type", "This is a new type of log", { print: true });
 logger.error("An error occurred", { print: true });
 logger.info("Information message");
 logger.warn("Warning message", { print: true });
@@ -48,6 +47,20 @@ logger.fatal("Fatal error", { print: true });
 ```
 
 Each logging method accepts a message string and an optional `option` object with a `print` property to specify whether to print the log to the console.
+
+### Creating a New Type Method
+
+To create a new log type, use `logger.new`. This method simplifies adding a log entry of a specified type and message to the database. Here's how you can use it:
+
+1. **Type**: Specify the type of log entry.
+2. **Message**: Provide the log message.
+3. **Options**: Include additional options such as `print` to control console logging.
+
+Example:
+
+```javascript
+logger.new("type", "This is a new type of log", { print: true });
+```
 
 ### Templating
 
@@ -67,9 +80,9 @@ logger.useTemplate(
   { message: "Connection timeout" },
   { print: true }
 );
-```
 
-> **Note:** Templates are not persisted in the database. You need to recreate them upon API restart.
+// Note: Templates are not persisted in the database. You need to recreate them upon API restart.
+```
 
 ### Retrieving Logs
 

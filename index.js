@@ -73,6 +73,147 @@ class MongoLogger {
     }
 
     /**
+     * Creates a new error entry in the database.
+     * 
+     * This method will add a log entry of the specified type and message to the database.
+     * If the logger is not initialized, it will log an error message.
+     * 
+     * @async
+     * @param {string} message - The log message.
+     * @param {Object} option - Additional options for logging.
+     * @param {boolean} option.print - If true, prints the log to the console.
+     * @throws Will throw an error if there is an issue adding the log entry to the database.
+     */
+    async error(message, option) {
+        if (!this.logSchema) {
+            console.error('MongoLogger not initialized');
+            return;
+        }
+        try {
+
+            const result = await this.logSchema.create({type: "error", message });
+            if (option.print) {
+                print("error", Date.now(), message)
+            }
+        } catch (err) {
+            console.error('Error adding log entry:', err);
+        }
+    }
+    
+    /**
+     * Creates a new error entry in the database.
+     * 
+     * This method will add a log entry of the specified type and message to the database.
+     * If the logger is not initialized, it will log an error message.
+     * 
+     * @async
+     * @param {string} message - The log message.
+     * @param {Object} option - Additional options for logging.
+     * @param {boolean} option.print - If true, prints the log to the console.
+     * @throws Will throw an error if there is an issue adding the log entry to the database.
+     */
+    async info(message, option) {
+        if (!this.logSchema) {
+            console.error('MongoLogger not initialized');
+            return;
+        }
+        try {
+
+            const result = await this.logSchema.create({type: "info", message });
+            if (option.print) {
+                print("info", Date.now(), message)
+            }
+        } catch (err) {
+            console.error('Error adding log entry:', err);
+        }
+    }
+
+
+    /**
+     * Creates a new warn entry in the database.
+     * 
+     * This method will add a log entry of the specified type and message to the database.
+     * If the logger is not initialized, it will log an error message.
+     * 
+     * @async
+     * @param {string} message - The log message.
+     * @param {Object} option - Additional options for logging.
+     * @param {boolean} option.print - If true, prints the log to the console.
+     * @throws Will throw an error if there is an issue adding the log entry to the database.
+     */
+    async warn(message, option) {
+        if (!this.logSchema) {
+            console.error('MongoLogger not initialized');
+            return;
+        }
+        try {
+
+            const result = await this.logSchema.create({type: "warn", message });
+            if (option.print) {
+                print("warn", Date.now(), message)
+            }
+        } catch (err) {
+            console.error('Error adding log entry:', err);
+        }
+    }
+
+    /**
+     * Creates a new fatal entry in the database.
+     * 
+     * This method will add a log entry of the specified type and message to the database.
+     * If the logger is not initialized, it will log an error message.
+     * 
+     * @async
+     * @param {string} message - The log message.
+     * @param {Object} option - Additional options for logging.
+     * @param {boolean} option.print - If true, prints the log to the console.
+     * @throws Will throw an error if there is an issue adding the log entry to the database.
+     */
+    async fatal(message, option) {
+        if (!this.logSchema) {
+            console.error('MongoLogger not initialized');
+            return;
+        }
+        try {
+
+            const result = await this.logSchema.create({type: "fatal", message });
+            if (option.print) {
+                print("fatal", Date.now(), message)
+            }
+        } catch (err) {
+            console.error('Error adding log entry:', err);
+        }
+    }
+
+    /**
+     * Creates a new debug entry in the database.
+     * 
+     * This method will add a log entry of the specified type and message to the database.
+     * If the logger is not initialized, it will log an error message.
+     * 
+     * @async
+     * @param {string} message - The log message.
+     * @param {Object} option - Additional options for logging.
+     * @param {boolean} option.print - If true, prints the log to the console.
+     * @throws Will throw an error if there is an issue adding the log entry to the database.
+     */
+    async debug(message, option) {
+        if (!this.logSchema) {
+            console.error('MongoLogger not initialized');
+            return;
+        }
+        try {
+
+            const result = await this.logSchema.create({type: "debug", message });
+            if (option.print) {
+                print("debug", Date.now(), message)
+            }
+        } catch (err) {
+            console.error('Error adding log entry:', err);
+        }
+    }
+
+    /**
      * Prints log entries from the database based on the provided options.
      * 
      * This method retrieves and prints log entries from the database, 

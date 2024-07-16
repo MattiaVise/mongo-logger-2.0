@@ -13,9 +13,31 @@ How to start:
   
 
 Note: Make sure to use `await` before `initialize` because it requires time to establish the connection with the database.
+### logger.info()
+ Add a new info log. You can choose to print to the console.
 
+    logger.info( "Log Message", {print: true})
+
+### logger.error()
+ Add a new error log. You can choose to print to the console.
+
+    logger.error( "Log Message", {print: true})	
+
+### logger.warn()
+ Add a new warn log. You can choose to print to the console.
+
+    logger.warn( "Log Message", {print: true})	
+
+### logger.debug()
+ Add a new debug log. You can choose to print to the console.
+
+    logger.debug( "Log Message", {print: true})	
+### logger.fatal()
+ Add a new fatal log. You can choose to print to the console.
+
+    logger.debug( "Log Message", {print: true})	
 ### logger.new()
- Add a new log. You can choose to print to the console.
+ Add a new log. You can choose type and if you want to print to the console.
 
     logger.new("error", "Log Message", {print: true})
 	

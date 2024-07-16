@@ -1,180 +1,257 @@
 # Mongo-Logger-2.0
 
-  
+MongoLogger is a Node.js module designed to facilitate logging into a MongoDB database. It provides various functionalities such as adding logs, retrieving logs, printing logs, and exporting logs to JSON files.
 
-MongoLogger is a Node.js module designed to facilitate logging into a MongoDB database and performing various operations such as adding logs, retrieving logs, printing logs, and exporting logs to JSON files.
+## Getting Started
 
-How to start:
+```javascript
+const MongoLogger = require("mongo-logger-2.0");
+const logger = new MongoLogger("mongodb://localhost:27017/loggerDb");
+await logger.initialize();
+```
 
-    const  MongoLogger  =  require("mongo-logger-2.0")
-    
-    const  logger  =  new  MongoLogger("mongodb://localhost:27017/loggerDb")
-    await logger.initialize() 
-  
+> **Note:** Make sure to use `await` before `initialize` because it requires time to establish the connection with the database.
 
-Note: Make sure to use `await` before `initialize` because it requires time to establish the connection with the database.
-### logger.info()
- Add a new info log. You can choose to print to the console.
+## Logger Methods
 
-    logger.info( "Log Message", {print: true})
+### `logger.info()`
 
-### logger.error()
- Add a new error log. You can choose to print to the console.
+Adds a new info log. Optionally prints to the console (default: `print: false`).
 
-    logger.error( "Log Message", {print: true})	
+```javascript
+logger.info("Log Message", { print: true });
+```
 
-### logger.warn()
- Add a new warn log. You can choose to print to the console.
+### `logger.error()`
 
-    logger.warn( "Log Message", {print: true})	
+Adds a new error log. Optionally prints to the console (default: `print: false`).
 
-### logger.debug()
- Add a new debug log. You can choose to print to the console.
+```javascript
+logger.error("Log Message", { print: true });
+```
 
-    logger.debug( "Log Message", {print: true})	
-### logger.fatal()
- Add a new fatal log. You can choose to print to the console.
+### `logger.warn()`
 
-    logger.fatal( "Log Message", {print: true})	
-### logger.new()
- Add a new log. You can choose type and if you want to print to the console.
+Adds a new warn log. Optionally prints to the console (default: `print: false`).
 
-    logger.new("error", "Log Message", {print: true})
-	
-console:
+```javascript
+logger.warn("Log Message", { print: true });
+```
 
-    error | Mon Jul 15 2024 15:55:53 GMT+0200 (Central European Summer Time) |	Log Message
-  ### logger.printLogs()
-Print logs with optional limit and type filter. If not specified, prints all logs.
+### `logger.debug()`
 
-    logger.printLogs({limit: 3, type: error})
-console:
+Adds a new debug log. Optionally prints to the console (default: `print: false`).
 
-    error | Mon Jul 15 2024 17:10:50 GMT+0200 (Central European Summer Time) | error 1
-    error | Mon Jul 15 2024 17:10:33 GMT+0200 (Central European Summer Time) | error 2
-    error | Mon Jul 15 2024 15:55:53 GMT+0200 (Central European Summer Time) | error 3
-   ### logger.toString()
-Retrieve logs as a string with optional limit and type filter. If not specified, retrieves all logs.
+```javascript
+logger.debug("Log Message", { print: true });
+```
 
-    let result = await logger.toString({limit: 3, type: error})
-result: 
+### `logger.fatal()`
 
-    error | Mon Jul 15 2024 17:10:50 GMT+0200 (Central European Summer Time) | error 1
-    error | Mon Jul 15 2024 17:10:33 GMT+0200 (Central European Summer Time) | error 2
-    error | Mon Jul 15 2024 15:55:53 GMT+0200 (Central European Summer Time) | error 3
-  ### logger.findLogs()
- Find logs in the database with optional limit and type filter.
+Adds a new fatal log. Optionally prints to the console (default: `print: false`).
 
-    const result = await logger.findLogs({limit: 3, type: error})
-result:
+```javascript
+logger.fatal("Log Message", { print: true });
+```
 
-    [
-      {
-        _id: new ObjectId('66953d27530ee005cc5ee467'),
-        message: 'error 3',
-        type: 'error',
-        timestamp: 2024-07-15T15:15:51.709Z,
-        __v: 0
-      },
-      {
-        _id: new ObjectId('66953d0ba38a87b35d9d0d03'),
-        message: 'error 2',
-        type: 'error',
-        timestamp: 2024-07-15T15:15:23.904Z,
-        __v: 0
-      },
-      {
-        _id: new ObjectId('66953ce72c74ca0fa0cffe2c'),
-        message: 'error 1',
-        type: 'error',
-        timestamp: 2024-07-15T15:14:47.898Z,
-        __v: 0
-      }
-    ]
-  ### logger.createLogFileForDay()
- Create a JSON log file for a specific day.
+### `logger.new()`
 
-    await logger.createLogFileForDay(Date.now(), "./file.json", {type: error})
-  ### logger.printLogForDay()
- Print logs for a specific day with optional type filter.
+Adds a new log of a specified type. Optionally prints to the console (default: `print: false`).
 
-    await logger.printLogForDay(Date.now(), {type: error})
-console:
+```javascript
+logger.new("error", "Log Message", { print: true });
+```
 
-    error | Mon Jul 15 2024 17:10:50 GMT+0200 (Central European Summer Time) | error 1
-    error | Mon Jul 15 2024 17:10:33 GMT+0200 (Central European Summer Time) | error 2
-    error | Mon Jul 15 2024 15:55:53 GMT+0200 (Central European Summer Time) | error 3
-  ### logger.getLogForDay()
- Retrieve logs for a specific day with optional type filter.
+Console output:
 
-    const result = await logger.getLogForDay(Date.now(), {type: error})
-result:
+```
+error | Mon Jul 15 2024 15:55:53 GMT+0200 (Central European Summer Time) | Log Message
+```
 
-    [
-      {
-        _id: new ObjectId('66953d27530ee005cc5ee467'),
-        message: 'error 3',
-        type: 'error',
-        timestamp: 2024-07-15T15:15:51.709Z,
-        __v: 0
-      },
-      {
-        _id: new ObjectId('66953d0ba38a87b35d9d0d03'),
-        message: 'error 2',
-        type: 'error',
-        timestamp: 2024-07-15T15:15:23.904Z,
-        __v: 0
-      },
-      {
-        _id: new ObjectId('66953ce72c74ca0fa0cffe2c'),
-        message: 'error 1',
-        type: 'error',
-        timestamp: 2024-07-15T15:14:47.898Z,
-        __v: 0
-      }
-    ]
+### `logger.printLogs()`
 
-  ### logger.getLogBetweenDate()
- Retrieve logs between two specific dates with optional type filter.
+Prints logs with an optional limit and type filter. If not specified, prints all logs.
 
-    const result = await logger.getLogForDay(firstDate, secondDate, {type: error})
-result:
+```javascript
+logger.printLogs({ limit: 3, type: "error" });
+```
 
-    [
-      {
-        _id: new ObjectId('66953d27530ee005cc5ee467'),
-        message: 'error 3',
-        type: 'error',
-        timestamp: 2024-07-15T15:15:51.709Z,
-        __v: 0
-      },
-      {
-        _id: new ObjectId('66953d0ba38a87b35d9d0d03'),
-        message: 'error 2',
-        type: 'error',
-        timestamp: 2024-07-15T15:15:23.904Z,
-        __v: 0
-      },
-      {
-        _id: new ObjectId('66953ce72c74ca0fa0cffe2c'),
-        message: 'error 1',
-        type: 'error',
-        timestamp: 2024-07-15T15:14:47.898Z,
-        __v: 0
-      }
-    ]
-   ### logger.printLogBetweenDate()
- Print logs between two specific dates with optional type filter.
+Console output:
 
-    await logger.printLogForDay(firstDate, secondDate, {type: error})
-console:
+```
+error | Mon Jul 15 2024 17:10:50 GMT+0200 (Central European Summer Time) | error 1
+error | Mon Jul 15 2024 17:10:33 GMT+0200 (Central European Summer Time) | error 2
+error | Mon Jul 15 2024 15:55:53 GMT+0200 (Central European Summer Time) | error 3
+```
 
-    error | Mon Jul 15 2024 17:10:50 GMT+0200 (Central European Summer Time) | error 1
-    error | Mon Jul 15 2024 17:10:33 GMT+0200 (Central European Summer Time) | error 2
-    error | Mon Jul 15 2024 15:55:53 GMT+0200 (Central European Summer Time) | error 3
-   ### logger.createLogFileForDay()
- Create a JSON log file between two specific dates with optional type filter.
+### `logger.toString()`
 
-    await logger.createLogFileBetweenDate(firstDate, secondDate, "./file.json", {type: error})
-   
-   
+Retrieves logs as a string with an optional limit and type filter. If not specified, retrieves all logs.
+
+```javascript
+let result = await logger.toString({ limit: 3, type: "error" });
+```
+
+Result:
+
+```
+error | Mon Jul 15 2024 17:10:50 GMT+0200 (Central European Summer Time) | error 1
+error | Mon Jul 15 2024 17:10:33 GMT+0200 (Central European Summer Time) | error 2
+error | Mon Jul 15 2024 15:55:53 GMT+0200 (Central European Summer Time) | error 3
+```
+
+### `logger.findLogs()`
+
+Finds logs in the database with an optional limit and type filter.
+
+```javascript
+const result = await logger.findLogs({ limit: 3, type: "error" });
+```
+
+Result:
+
+```json
+[
+  {
+    "_id": "66953d27530ee005cc5ee467",
+    "message": "error 3",
+    "type": "error",
+    "timestamp": "2024-07-15T15:15:51.709Z",
+    "__v": 0
+  },
+  {
+    "_id": "66953d0ba38a87b35d9d0d03",
+    "message": "error 2",
+    "type": "error",
+    "timestamp": "2024-07-15T15:15:23.904Z",
+    "__v": 0
+  },
+  {
+    "_id": "66953ce72c74ca0fa0cffe2c",
+    "message": "error 1",
+    "type": "error",
+    "timestamp": "2024-07-15T15:14:47.898Z",
+    "__v": 0
+  }
+]
+```
+
+### `logger.createLogFileForDay()`
+
+Creates a JSON log file for a specific day with an optional type filter.
+
+```javascript
+await logger.createLogFileForDay(Date.now(), "./file.json", { type: "error" });
+```
+
+### `logger.printLogForDay()`
+
+Prints logs for a specific day with an optional type filter.
+
+```javascript
+await logger.printLogForDay(Date.now(), { type: "error" });
+```
+
+Console output:
+
+```
+error | Mon Jul 15 2024 17:10:50 GMT+0200 (Central European Summer Time) | error 1
+error | Mon Jul 15 2024 17:10:33 GMT+0200 (Central European Summer Time) | error 2
+error | Mon Jul 15 2024 15:55:53 GMT+0200 (Central European Summer Time) | error 3
+```
+
+### `logger.getLogForDay()`
+
+Retrieves logs for a specific day with an optional type filter.
+
+```javascript
+const result = await logger.getLogForDay(Date.now(), { type: "error" });
+```
+
+Result:
+
+```json
+[
+  {
+    "_id": "66953d27530ee005cc5ee467",
+    "message": "error 3",
+    "type": "error",
+    "timestamp": "2024-07-15T15:15:51.709Z",
+    "__v": 0
+  },
+  {
+    "_id": "66953d0ba38a87b35d9d0d03",
+    "message": "error 2",
+    "type": "error",
+    "timestamp": "2024-07-15T15:15:23.904Z",
+    "__v": 0
+  },
+  {
+    "_id": "66953ce72c74ca0fa0cffe2c",
+    "message": "error 1",
+    "type": "error",
+    "timestamp": "2024-07-15T15:14:47.898Z",
+    "__v": 0
+  }
+]
+```
+
+### `logger.getLogBetweenDate()`
+
+Retrieves logs between two specific dates with an optional type filter.
+
+```javascript
+const result = await logger.getLogBetweenDate(firstDate, secondDate, { type: "error" });
+```
+
+Result:
+
+```json
+[
+  {
+    "_id": "66953d27530ee005cc5ee467",
+    "message": "error 3",
+    "type": "error",
+    "timestamp": "2024-07-15T15:15:51.709Z",
+    "__v": 0
+  },
+  {
+    "_id": "66953d0ba38a87b35d9d0d03",
+    "message": "error 2",
+    "type": "error",
+    "timestamp": "2024-07-15T15:15:23.904Z",
+    "__v": 0
+  },
+  {
+    "_id": "66953ce72c74ca0fa0cffe2c",
+    "message": "error 1",
+    "type": "error",
+    "timestamp": "2024-07-15T15:14:47.898Z",
+    "__v": 0
+  }
+]
+```
+
+### `logger.printLogBetweenDate()`
+
+Prints logs between two specific dates with an optional type filter.
+
+```javascript
+await logger.printLogBetweenDate(firstDate, secondDate, { type: "error" });
+```
+
+Console output:
+
+```
+error | Mon Jul 15 2024 17:10:50 GMT+0200 (Central European Summer Time) | error 1
+error | Mon Jul 15 2024 17:10:33 GMT+0200 (Central European Summer Time) | error 2
+error | Mon Jul 15 2024 15:55:53 GMT+0200 (Central European Summer Time) | error 3
+```
+
+### `logger.createLogFileBetweenDate()`
+
+Creates a JSON log file between two specific dates with an optional type filter.
+
+```javascript
+await logger.createLogFileBetweenDate(firstDate, secondDate, "./file.json", { type: "error" });
+```

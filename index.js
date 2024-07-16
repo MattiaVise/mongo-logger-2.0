@@ -651,7 +651,7 @@ class MongoLogger {
      useTemplate(name, input, option) {
         const template = this.templates.find(t => t.name === name);
         if (!template) {
-            throw new Error(`Template '${name}' non trovato.`);
+            throw new Error(`Template '${name}' don't found.`);
         }
 
         let result = template.string;

@@ -1,257 +1,134 @@
-# Mongo-Logger-2.0
 
-MongoLogger is a Node.js module designed to facilitate logging into a MongoDB database. It provides various functionalities such as adding logs, retrieving logs, printing logs, and exporting logs to JSON files.
+# MongoLogger
 
-## Getting Started
+MongoLogger is a logging utility that interacts with a MongoDB database to store, retrieve, and manipulate log entries. It provides various methods for logging different types of messages and supports templating for structured log messages.
+
+## Installation
+
+Install the MongoLogger package via npm:
+
+```bash
+npm install mongo-logger
+```
+
+## Usage
+
+### Initialize MongoLogger
+
+First, initialize MongoLogger with your MongoDB connection URI:
 
 ```javascript
-const MongoLogger = require("mongo-logger-2.0");
-const logger = new MongoLogger("mongodb://localhost:27017/loggerDb");
-await logger.initialize();
+const MongoLogger = require('mongo-logger');
+
+const logger = new MongoLogger('mongodb://localhost:27017/mydb');
+
+// Initialize the logger
+logger.initialize()
+  .then(() => {
+    console.log('MongoLogger initialized successfully');
+  })
+  .catch(err => {
+    console.error('Failed to initialize MongoLogger:', err);
+  });
 ```
 
-> **Note:** Make sure to use `await` before `initialize` because it requires time to establish the connection with the database.
+### Logging Methods
 
-## Logger Methods
-
-### `logger.info()`
-
-Adds a new info log. Optionally prints to the console (default: `print: false`).
+MongoLogger provides methods to log messages of different types (`error`, `info`, `warn`, `debug`, `fatal`):
 
 ```javascript
-logger.info("Log Message", { print: true });
+// Logging examples
+logger.error('An error occurred', { print: true });
+logger.info('Information message');
+logger.warn('Warning message', { print: true });
+logger.debug('Debugging message');
+logger.fatal('Fatal error', { print: true });
 ```
 
-### `logger.error()`
+Each logging method accepts a message string and an optional `option` object with a `print` property to specify whether to print the log to the console.
 
-Adds a new error log. Optionally prints to the console (default: `print: false`).
+### Templating
+
+MongoLogger supports templating for structured log messages. Use `createTemplate` to define templates and `useTemplate` to apply them:
 
 ```javascript
-logger.error("Log Message", { print: true });
+// Create a template
+logger.createTemplate('error', 'errorTemplate', 'Error occurred: {% message %}');
+
+// Use the template with data
+logger.useTemplate('errorTemplate', { message: 'Connection timeout' }, { print: true });
 ```
 
-### `logger.warn()`
+### Retrieving Logs
 
-Adds a new warn log. Optionally prints to the console (default: `print: false`).
+You can retrieve logs based on various criteria such as date range, log type, and more:
 
 ```javascript
-logger.warn("Log Message", { print: true });
+// Retrieve logs for a specific date
+logger.getLogForDay('2023-07-15', { type: 'error' })
+  .then(logs => {
+    console.log('Logs for 2023-07-15:', logs);
+  })
+  .catch(err => {
+    console.error('Error retrieving logs:', err);
+  });
+
+// Retrieve logs between two dates
+logger.getLogBetweenDate('2023-07-01', '2023-07-15', { type: 'warn' })
+  .then(logs => {
+    console.log('Logs between 2023-07-01 and 2023-07-15:', logs);
+  })
+  .catch(err => {
+    console.error('Error retrieving logs:', err);
+  });
 ```
 
-### `logger.debug()`
+### Printing Logs
 
-Adds a new debug log. Optionally prints to the console (default: `print: false`).
+Print logs directly to the console using `printLogForDay` or `printLogBetweenDate` methods:
 
 ```javascript
-logger.debug("Log Message", { print: true });
+// Print logs for a specific date
+logger.printLogForDay('2023-07-15', { type: 'error' })
+  .catch(err => {
+    console.error('Error printing logs:', err);
+  });
+
+// Print logs between two dates
+logger.printLogBetweenDate('2023-07-01', '2023-07-15', { type: 'warn' })
+  .catch(err => {
+    console.error('Error printing logs:', err);
+  });
 ```
 
-### `logger.fatal()`
+### Creating Log Files
 
-Adds a new fatal log. Optionally prints to the console (default: `print: false`).
+Create JSON log files using `createLogFileForDay` or `createLogFileBetweenDate` methods:
 
 ```javascript
-logger.fatal("Log Message", { print: true });
+// Create a log file for logs on a specific date
+logger.createLogFileForDay('2023-07-15', './logs/log-2023-07-15.json', { type: 'error' })
+  .catch(err => {
+    console.error('Error creating log file:', err);
+  });
+
+// Create a log file for logs between two dates
+logger.createLogFileBetweenDate('2023-07-01', '2023-07-15', './logs/log-2023-07-01-to-2023-07-15.json', { type: 'warn' })
+  .catch(err => {
+    console.error('Error creating log file:', err);
+  });
 ```
 
-### `logger.new()`
+### Configuration Options
 
-Adds a new log of a specified type. Optionally prints to the console (default: `print: false`).
+- **dbUri**: The MongoDB connection URI.
+- **print**: An optional configuration option for logging methods to print the log to the console.
 
-```javascript
-logger.new("error", "Log Message", { print: true });
-```
+## Contributing
 
-Console output:
+Contributions are welcome! Please fork the repository and submit a pull request.
 
-```
-error | Mon Jul 15 2024 15:55:53 GMT+0200 (Central European Summer Time) | Log Message
-```
+## License
 
-### `logger.printLogs()`
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-Prints logs with an optional limit and type filter. If not specified, prints all logs.
-
-```javascript
-logger.printLogs({ limit: 3, type: "error" });
-```
-
-Console output:
-
-```
-error | Mon Jul 15 2024 17:10:50 GMT+0200 (Central European Summer Time) | error 1
-error | Mon Jul 15 2024 17:10:33 GMT+0200 (Central European Summer Time) | error 2
-error | Mon Jul 15 2024 15:55:53 GMT+0200 (Central European Summer Time) | error 3
-```
-
-### `logger.toString()`
-
-Retrieves logs as a string with an optional limit and type filter. If not specified, retrieves all logs.
-
-```javascript
-let result = await logger.toString({ limit: 3, type: "error" });
-```
-
-Result:
-
-```
-error | Mon Jul 15 2024 17:10:50 GMT+0200 (Central European Summer Time) | error 1
-error | Mon Jul 15 2024 17:10:33 GMT+0200 (Central European Summer Time) | error 2
-error | Mon Jul 15 2024 15:55:53 GMT+0200 (Central European Summer Time) | error 3
-```
-
-### `logger.findLogs()`
-
-Finds logs in the database with an optional limit and type filter.
-
-```javascript
-const result = await logger.findLogs({ limit: 3, type: "error" });
-```
-
-Result:
-
-```json
-[
-  {
-    "_id": "66953d27530ee005cc5ee467",
-    "message": "error 3",
-    "type": "error",
-    "timestamp": "2024-07-15T15:15:51.709Z",
-    "__v": 0
-  },
-  {
-    "_id": "66953d0ba38a87b35d9d0d03",
-    "message": "error 2",
-    "type": "error",
-    "timestamp": "2024-07-15T15:15:23.904Z",
-    "__v": 0
-  },
-  {
-    "_id": "66953ce72c74ca0fa0cffe2c",
-    "message": "error 1",
-    "type": "error",
-    "timestamp": "2024-07-15T15:14:47.898Z",
-    "__v": 0
-  }
-]
-```
-
-### `logger.createLogFileForDay()`
-
-Creates a JSON log file for a specific day with an optional type filter.
-
-```javascript
-await logger.createLogFileForDay(Date.now(), "./file.json", { type: "error" });
-```
-
-### `logger.printLogForDay()`
-
-Prints logs for a specific day with an optional type filter.
-
-```javascript
-await logger.printLogForDay(Date.now(), { type: "error" });
-```
-
-Console output:
-
-```
-error | Mon Jul 15 2024 17:10:50 GMT+0200 (Central European Summer Time) | error 1
-error | Mon Jul 15 2024 17:10:33 GMT+0200 (Central European Summer Time) | error 2
-error | Mon Jul 15 2024 15:55:53 GMT+0200 (Central European Summer Time) | error 3
-```
-
-### `logger.getLogForDay()`
-
-Retrieves logs for a specific day with an optional type filter.
-
-```javascript
-const result = await logger.getLogForDay(Date.now(), { type: "error" });
-```
-
-Result:
-
-```json
-[
-  {
-    "_id": "66953d27530ee005cc5ee467",
-    "message": "error 3",
-    "type": "error",
-    "timestamp": "2024-07-15T15:15:51.709Z",
-    "__v": 0
-  },
-  {
-    "_id": "66953d0ba38a87b35d9d0d03",
-    "message": "error 2",
-    "type": "error",
-    "timestamp": "2024-07-15T15:15:23.904Z",
-    "__v": 0
-  },
-  {
-    "_id": "66953ce72c74ca0fa0cffe2c",
-    "message": "error 1",
-    "type": "error",
-    "timestamp": "2024-07-15T15:14:47.898Z",
-    "__v": 0
-  }
-]
-```
-
-### `logger.getLogBetweenDate()`
-
-Retrieves logs between two specific dates with an optional type filter.
-
-```javascript
-const result = await logger.getLogBetweenDate(firstDate, secondDate, { type: "error" });
-```
-
-Result:
-
-```json
-[
-  {
-    "_id": "66953d27530ee005cc5ee467",
-    "message": "error 3",
-    "type": "error",
-    "timestamp": "2024-07-15T15:15:51.709Z",
-    "__v": 0
-  },
-  {
-    "_id": "66953d0ba38a87b35d9d0d03",
-    "message": "error 2",
-    "type": "error",
-    "timestamp": "2024-07-15T15:15:23.904Z",
-    "__v": 0
-  },
-  {
-    "_id": "66953ce72c74ca0fa0cffe2c",
-    "message": "error 1",
-    "type": "error",
-    "timestamp": "2024-07-15T15:14:47.898Z",
-    "__v": 0
-  }
-]
-```
-
-### `logger.printLogBetweenDate()`
-
-Prints logs between two specific dates with an optional type filter.
-
-```javascript
-await logger.printLogBetweenDate(firstDate, secondDate, { type: "error" });
-```
-
-Console output:
-
-```
-error | Mon Jul 15 2024 17:10:50 GMT+0200 (Central European Summer Time) | error 1
-error | Mon Jul 15 2024 17:10:33 GMT+0200 (Central European Summer Time) | error 2
-error | Mon Jul 15 2024 15:55:53 GMT+0200 (Central European Summer Time) | error 3
-```
-
-### `logger.createLogFileBetweenDate()`
-
-Creates a JSON log file between two specific dates with an optional type filter.
-
-```javascript
-await logger.createLogFileBetweenDate(firstDate, secondDate, "./file.json", { type: "error" });
-```

@@ -19,16 +19,19 @@ First, initialize MongoLogger with your MongoDB connection URI. Since initializa
 ```javascript
 const MongoLogger = require('mongo-logger-2.0');
 
-const logger = new MongoLogger('mongodb://localhost:27017/mydb');
-
-// Initialize the logger
-await logger.initialize()
-  .then(() => {
+async function initializeLogger() {
+  const logger = new MongoLogger('mongodb://localhost:27017/mydb');
+  
+  try {
+    await logger.initialize();
     console.log('MongoLogger initialized successfully');
-  })
-  .catch(err => {
+  } catch (err) {
     console.error('Failed to initialize MongoLogger:', err);
-  });
+  }
+}
+
+// Call the initialize function
+initializeLogger();
 ```
 
 ### Logging Methods
@@ -64,7 +67,8 @@ You can retrieve logs based on various criteria such as date range, log type, an
 
 ```javascript
 // Retrieve logs for a specific date
-logger.getLogForDay('2023-07-15', { type: 'error' })
+const date = new Date('2023-07-15');
+logger.getLogForDay(date, { type: 'error' })
   .then(logs => {
     console.log('Logs for 2023-07-15:', logs);
   })
@@ -73,13 +77,16 @@ logger.getLogForDay('2023-07-15', { type: 'error' })
   });
 
 // Retrieve logs between two dates
-logger.getLogBetweenDate('2023-07-01', '2023-07-15', { type: 'warn' })
+const startDate = new Date('2023-07-01');
+const endDate = new Date('2023-07-15');
+logger.getLogBetweenDate(startDate, endDate, { type: 'warn' })
   .then(logs => {
     console.log('Logs between 2023-07-01 and 2023-07-15:', logs);
   })
   .catch(err => {
     console.error('Error retrieving logs:', err);
   });
+
 ```
 
 ### Printing Logs
@@ -88,13 +95,13 @@ Print logs directly to the console using `printLogForDay` or `printLogBetweenDat
 
 ```javascript
 // Print logs for a specific date
-logger.printLogForDay('2023-07-15', { type: 'error' })
+logger.printLogForDay(date, { type: 'error' })
   .catch(err => {
     console.error('Error printing logs:', err);
   });
 
 // Print logs between two dates
-logger.printLogBetweenDate('2023-07-01', '2023-07-15', { type: 'warn' })
+logger.printLogBetweenDate(startDate, endDate, { type: 'warn' })
   .catch(err => {
     console.error('Error printing logs:', err);
   });
@@ -106,13 +113,13 @@ Create JSON log files using `createLogFileForDay` or `createLogFileBetweenDate` 
 
 ```javascript
 // Create a log file for logs on a specific date
-logger.createLogFileForDay('2023-07-15', './logs/log-2023-07-15.json', { type: 'error' })
+logger.createLogFileForDay(date, './logs/log-2023-07-15.json', { type: 'error' })
   .catch(err => {
     console.error('Error creating log file:', err);
   });
 
 // Create a log file for logs between two dates
-logger.createLogFileBetweenDate('2023-07-01', '2023-07-15', './logs/log-2023-07-01-to-2023-07-15.json', { type: 'warn' })
+logger.createLogFileBetweenDate(startDate, endDate, './logs/log-2023-07-01-to-2023-07-15.json', { type: 'warn' })
   .catch(err => {
     console.error('Error creating log file:', err);
   });

@@ -643,11 +643,24 @@ class MongoLogger {
         }
     }
 
-
+    /**
+     * Creates a new template and adds it to the templates array.
+     * @param {string} type - The type of the template (e.g., "error").
+     * @param {string} name - The unique name or identifier of the template.
+     * @param {string} string - The content or body of the template, stored as a string (e.g., "hello {% name %}").
+     */
      createTemplate(type, name, string) {
         this.templates.push({ type, name, string });
     }
 
+    /**
+     * Uses a template identified by its name to generate a result based on input data,
+     * and optionally prints or logs the result.
+     * @param {string} name - The name or identifier of the template to use.
+     * @param {Object} input - An object containing data to replace placeholders in the template.
+     * @param {Object} option - An optional object containing configuration options.
+     *                          - `print`: If true, prints the generated result.
+     */
      useTemplate(name, input, option) {
         const template = this.templates.find(t => t.name === name);
         if (!template) {

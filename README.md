@@ -1,4 +1,4 @@
-# MongoLogger 2.0
+# MongoLogger-2.0
 
 MongoLogger 2.0 is an advanced logging utility that interacts with a MongoDB database to store, retrieve, and manipulate log entries. It provides various methods for logging different types of messages and supports templating for structured log messages.
 

@@ -1,4 +1,3 @@
-
 # MongoLogger 2.0
 
 MongoLogger 2.0 is an advanced logging utility that interacts with a MongoDB database to store, retrieve, and manipulate log entries. It provides various methods for logging different types of messages and supports templating for structured log messages.
@@ -18,16 +17,15 @@ npm install mongo-logger-2.0
 First, initialize MongoLogger with your MongoDB connection URI. Since initialization may take some time to connect to the database, make sure to use `await` or handle promises accordingly:
 
 ```javascript
-const MongoLogger = require('mongo-logger-2.0');
-const logger = new MongoLogger('mongodb://localhost:27017/mydb');
+const MongoLogger = require("mongo-logger-2.0");
+const logger = new MongoLogger("mongodb://localhost:27017/mydb");
 
 async function initializeLogger() {
-  
   try {
     await logger.initialize();
-    console.log('MongoLogger initialized successfully');
+    console.log("MongoLogger initialized successfully");
   } catch (err) {
-    console.error('Failed to initialize MongoLogger:', err);
+    console.error("Failed to initialize MongoLogger:", err);
   }
 }
 
@@ -41,11 +39,12 @@ MongoLogger 2.0 provides methods to log messages of different types (`error`, `i
 
 ```javascript
 // Logging examples
-logger.error('An error occurred', { print: true });
-logger.info('Information message');
-logger.warn('Warning message', { print: true });
-logger.debug('Debugging message');
-logger.fatal('Fatal error', { print: true });
+logger.new("type", "This is a new type of log", { print: true });
+logger.error("An error occurred", { print: true });
+logger.info("Information message");
+logger.warn("Warning message", { print: true });
+logger.debug("Debugging message");
+logger.fatal("Fatal error", { print: true });
 ```
 
 Each logging method accepts a message string and an optional `option` object with a `print` property to specify whether to print the log to the console.
@@ -56,10 +55,18 @@ MongoLogger 2.0 supports templating for structured log messages. Use `createTemp
 
 ```javascript
 // Create a template
-logger.createTemplate('error', 'errorTemplate', 'Error occurred: {% message %}');
+logger.createTemplate(
+  "error",
+  "errorTemplate",
+  "Error occurred: {% message %}"
+);
 
 // Use the template with data
-logger.useTemplate('errorTemplate', { message: 'Connection timeout' }, { print: true });
+logger.useTemplate(
+  "errorTemplate",
+  { message: "Connection timeout" },
+  { print: true }
+);
 ```
 
 > **Note:** Templates are not persisted in the database. You need to recreate them upon API restart.
@@ -70,26 +77,27 @@ You can retrieve logs based on various criteria such as date range, log type, an
 
 ```javascript
 // Retrieve logs for a specific date
-const date = new Date('2023-07-15');
-logger.getLogForDay(date, { type: 'error' })
-  .then(logs => {
-    console.log('Logs for 2023-07-15:', logs);
+const date = new Date("2023-07-15");
+logger
+  .getLogForDay(date, { type: "error" })
+  .then((logs) => {
+    console.log("Logs for 2023-07-15:", logs);
   })
-  .catch(err => {
-    console.error('Error retrieving logs:', err);
+  .catch((err) => {
+    console.error("Error retrieving logs:", err);
   });
 
 // Retrieve logs between two dates
-const startDate = new Date('2023-07-01');
-const endDate = new Date('2023-07-15');
-logger.getLogBetweenDate(startDate, endDate, { type: 'warn' })
-  .then(logs => {
-    console.log('Logs between 2023-07-01 and 2023-07-15:', logs);
+const startDate = new Date("2023-07-01");
+const endDate = new Date("2023-07-15");
+logger
+  .getLogBetweenDate(startDate, endDate, { type: "warn" })
+  .then((logs) => {
+    console.log("Logs between 2023-07-01 and 2023-07-15:", logs);
   })
-  .catch(err => {
-    console.error('Error retrieving logs:', err);
+  .catch((err) => {
+    console.error("Error retrieving logs:", err);
   });
-
 ```
 
 ### Printing Logs
@@ -98,18 +106,18 @@ Print logs directly to the console using `printLogForDay` or `printLogBetweenDat
 
 ```javascript
 // Print logs for a specific date
-const date = new Date('2023-07-15');
-logger.printLogForDay(date, { type: 'error' })
-  .catch(err => {
-    console.error('Error printing logs:', err);
-  });
+const date = new Date("2023-07-15");
+logger.printLogForDay(date, { type: "error" }).catch((err) => {
+  console.error("Error printing logs:", err);
+});
 
 // Print logs between two dates
-const startDate = new Date('2023-07-01');
-const endDate = new Date('2023-07-15');
-logger.printLogBetweenDate(startDate, endDate, { type: 'warn' })
-  .catch(err => {
-    console.error('Error printing logs:', err);
+const startDate = new Date("2023-07-01");
+const endDate = new Date("2023-07-15");
+logger
+  .printLogBetweenDate(startDate, endDate, { type: "warn" })
+  .catch((err) => {
+    console.error("Error printing logs:", err);
   });
 ```
 
@@ -119,18 +127,25 @@ Create JSON log files using `createLogFileForDay` or `createLogFileBetweenDate` 
 
 ```javascript
 // Create a log file for logs on a specific date
-const date = new Date('2023-07-15');
-logger.createLogFileForDay(date, './logs/log-2023-07-15.json', { type: 'error' })
-  .catch(err => {
-    console.error('Error creating log file:', err);
+const date = new Date("2023-07-15");
+logger
+  .createLogFileForDay(date, "./logs/log-2023-07-15.json", { type: "error" })
+  .catch((err) => {
+    console.error("Error creating log file:", err);
   });
 
 // Create a log file for logs between two dates
-const startDate = new Date('2023-07-01');
-const endDate = new Date('2023-07-15');
-logger.createLogFileBetweenDate(startDate, endDate, './logs/log-2023-07-01-to-2023-07-15.json', { type: 'warn' })
-  .catch(err => {
-    console.error('Error creating log file:', err);
+const startDate = new Date("2023-07-01");
+const endDate = new Date("2023-07-15");
+logger
+  .createLogFileBetweenDate(
+    startDate,
+    endDate,
+    "./logs/log-2023-07-01-to-2023-07-15.json",
+    { type: "warn" }
+  )
+  .catch((err) => {
+    console.error("Error creating log file:", err);
   });
 ```
 

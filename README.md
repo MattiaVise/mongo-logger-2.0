@@ -131,7 +131,7 @@ logger
   });
 
 // Print last logs
-let result = await logger.printLogs({limit:3 type: "error"})
+logger.printLogs({limit:3 type: "error"})
 ```
 
 ### Creating Log Files

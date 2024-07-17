@@ -95,31 +95,24 @@ You can retrieve logs based on various criteria such as date range, log type, an
 ```javascript
 // Retrieve logs for a specific date
 const date = new Date("2023-07-15");
-logger
-  .getLogForDay(date, { type: "error" })
-  .then((logs) => {
-    console.log("Logs for 2023-07-15:", logs);
-  })
-  .catch((err) => {
-    console.error("Error retrieving logs:", err);
-  });
+let result = await logger.getLogForDay(date, { type: "error" })
+
+console.log(result)
 
 // Retrieve logs between two dates
 const startDate = new Date("2023-07-01");
 const endDate = new Date("2023-07-15");
-logger
-  .getLogBetweenDate(startDate, endDate, { type: "warn" })
-  .then((logs) => {
-    console.log("Logs between 2023-07-01 and 2023-07-15:", logs);
-  })
-  .catch((err) => {
-    console.error("Error retrieving logs:", err);
-  });
+let result = await  logger.getLogBetweenDate(startDate, endDate, { type: "warn" })
+ 
+console.log(result)
+
+// Retrive last logs
+logger.findLogs({limit: 3, type: "error"})
 ```
 
 ### Printing Logs
 
-Print logs directly to the console using `printLogForDay` or `printLogBetweenDate` methods:
+Print logs directly to the console using `printLogForDay`, `printLogBetweenDate` or `printLogs` methods:
 
 ```javascript
 // Print logs for a specific date
@@ -136,6 +129,9 @@ logger
   .catch((err) => {
     console.error("Error printing logs:", err);
   });
+
+// Print last logs
+logger.printLogs({limit:3 type: "error"})
 ```
 
 ### Creating Log Files

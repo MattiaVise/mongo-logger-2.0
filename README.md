@@ -107,7 +107,7 @@ let result = await  logger.getLogBetweenDate(startDate, endDate, { type: "warn" 
 console.log(result)
 
 // Retrive last logs
-logger.findLogs({limit: 3, type: "error"})
+let result = await logger.findLogs({limit: 3, type: "error"})
 ```
 
 ### Printing Logs
@@ -131,7 +131,7 @@ logger
   });
 
 // Print last logs
-logger.printLogs({limit:3 type: "error"})
+let result = await logger.printLogs({limit:3 type: "error"})
 ```
 
 ### Creating Log Files
